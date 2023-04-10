@@ -4,6 +4,7 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 import '@/styles/globals.css';
 
+import { SiteHeader } from '@/components/site-header';
 import { ThemeProvider } from '@/components/theme-provider';
 import { cn } from '@/lib/utils';
 
@@ -17,18 +18,20 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="ko"
-      className="scroll-smooth antialiased motion-reduce:scroll-auto"
-      suppressHydrationWarning
-    >
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className={cn('min-h-screen font-sans', inter.variable)}>
+    <html lang="ko" className="scroll-smooth motion-reduce:scroll-auto" suppressHydrationWarning>
+      <body
+        className={cn(
+          'min-h-screen bg-white font-sans text-slate-900 antialiased dark:bg-slate-900 dark:text-slate-50',
+          inter.variable
+        )}
+      >
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen flex-col">
+            <SiteHeader />
             <div className="container flex-1">{children}</div>
           </div>
-        </body>
-      </ThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

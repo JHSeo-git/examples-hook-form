@@ -1,2 +1,10 @@
+cache
+.cache
+pnpm-lock.yaml
+public
+CHANGELOG.md
+dist
 node_modules
+.next
+build
 .gitignore
