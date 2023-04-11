@@ -1,0 +1,41 @@
+[data-shiki-pretty-code-fragment] {
+  @apply relative;
+}
+[data-shiki-pretty-code-fragment] .shiki {
+  @apply py-4 rounded-md overflow-x-auto;
+}
+[data-shiki-pretty-code-fragment] code {
+  @apply grid min-w-full break-words rounded-none border-0 bg-transparent dark:bg-transparent p-0 text-sm;
+  counter-reset: line;
+  box-decoration-break: clone;
+}
+[data-shiki-pretty-code-fragment] .line {
+  @apply px-4 py-1 min-h-[0.85rem] border-l-4 border-l-transparent;
+}
+[data-shiki-pretty-code-fragment] [data-line-numbers] .line {
+  @apply px-2;
+}
+[data-shiki-pretty-code-fragment] [data-line-numbers] > .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: gray;
+}
+[data-shiki-pretty-code-fragment] .line--highlighted {
+  @apply bg-slate-300 bg-opacity-10 border-l-blue-500;
+}
+[data-shiki-pretty-code-fragment] .line-highlighted span {
+  @apply relative;
+}
+[data-shiki-pretty-code-fragment] .word--highlighted {
+  @apply rounded-md bg-slate-300 bg-opacity-10 p-1;
+}
+[data-rehype-pretty-code-title] {
+  @apply inline-block mt-2 py-1 px-1 text-sm font-medium text-slate-700 dark:text-slate-400;
+}
+[data-rehype-pretty-code-title] + pre {
+  @apply mt-2;
+}
