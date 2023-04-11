@@ -29,7 +29,7 @@ export function SidbarNav({ items }: SidbarNavProps) {
           <Link
             href={item.href}
             className={cn(
-              'group flex w-full items-center rounded-md px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800',
+              'my-1/2 group flex w-full items-center rounded-md px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800',
               pathname === item.href && 'bg-slate-100 dark:bg-slate-800'
             )}
           >

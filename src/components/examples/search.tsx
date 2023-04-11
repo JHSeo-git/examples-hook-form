@@ -8,16 +8,10 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 
 interface FormValues {
-  email: string;
-  password: string;
-  name: string;
-  job: string;
-  birthdate: string;
-  sex: string;
-  phone: string;
+  dates: string;
 }
 
-function SignUp() {
+function Search() {
   const { handleSubmit, reset, register } = useForm<FormValues>({
     mode: 'onChange',
   });
@@ -28,11 +22,11 @@ function SignUp() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Label>이메일</Label>
-      <Input {...register('name')} />
-      <Button type="submit">회원가입</Button>
+      <Label>검색어</Label>
+      <Input {...register('dates')} />
+      <Button type="submit">검색</Button>
     </form>
   );
 }
 
-export default SignUp;
+export default Search;
