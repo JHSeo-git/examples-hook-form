@@ -1,7 +1,7 @@
 import '@/styles/shiki.css';
 
-import { ExampleMain } from '@/components/example-main';
 import Search from '@/components/examples/search';
+import { Preview } from '@/components/preview';
 
 import { getMarkup } from '../examples-utils';
 
@@ -9,9 +9,9 @@ async function ExampleSearchPage() {
   const markup = await getMarkup('search.tsx');
 
   return (
-    <ExampleMain title="Search" markup={markup}>
+    <Preview title="Search" markup={markup}>
       <Search />
-    </ExampleMain>
+    </Preview>
   );
 }
 

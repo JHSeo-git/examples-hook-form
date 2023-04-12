@@ -58,7 +58,7 @@ export default function Home() {
         </li>
       </ul>
       <div className="mt-4">
-        <Link href="/examples" className={buttonVariants()}>
+        <Link href="/examples" className={buttonVariants({ size: 'lg' })}>
           See Examples
         </Link>
       </div>

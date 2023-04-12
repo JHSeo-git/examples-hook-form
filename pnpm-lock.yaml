@@ -4,6 +4,9 @@ dependencies:
   '@headlessui/react':
     specifier: ^1.7.13
     version: 1.7.13(react-dom@18.2.0)(react@18.2.0)
+  '@hookform/resolvers':
+    specifier: ^3.0.1
+    version: 3.0.1(react-hook-form@7.43.9)
   '@radix-ui/react-accessible-icon':
     specifier: ^1.0.2
     version: 1.0.2(react-dom@18.2.0)(react@18.2.0)
@@ -97,6 +100,12 @@ dependencies:
   '@types/react-dom':
     specifier: 18.0.11
     version: 18.0.11
+  '@types/title':
+    specifier: ^3.4.1
+    version: 3.4.1
+  '@types/validator':
+    specifier: ^13.7.14
+    version: 13.7.14
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.57.1
     version: 5.57.1(@typescript-eslint/parser@5.57.1)(eslint@8.37.0)(typescript@5.0.4)
@@ -184,11 +193,12 @@ dependencies:
   typescript:
     specifier: 5.0.4
     version: 5.0.4
-
-devDependencies:
-  '@types/title':
-    specifier: ^3.4.1
-    version: 3.4.1
+  validator:
+    specifier: ^13.9.0
+    version: 13.9.0
+  zod:
+    specifier: ^3.21.4
+    version: 3.21.4
 
 packages:
 
@@ -270,6 +280,14 @@ packages:
       client-only: 0.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
+    dev: false
+
+  /@hookform/resolvers@3.0.1(react-hook-form@7.43.9):
+    resolution: {integrity: sha512-n5oOt0cLw9mQNW3/k9zWaPsNWQcc0k6Jpc7XUrg2Q/AqqsHp3IVa1juqHCxczXI6uXHBa69ILc4pdtsRGyuzsw==}
+    peerDependencies:
+      react-hook-form: ^7.0.0
+    dependencies:
+      react-hook-form: 7.43.9(react@18.2.0)
     dev: false
 
   /@humanwhocodes/config-array@0.11.8:
@@ -1464,7 +1482,11 @@ packages:
 
   /@types/title@3.4.1:
     resolution: {integrity: sha512-GAt+5DJl84n7Qz+/weJteapG8j2csP/5NOg8H4dnaTxuqsK6AcZ4hPYsvvjAjcEVv5l9dfK8rz4pOfpgjlrNqg==}
-    dev: true
+    dev: false
+
+  /@types/validator@13.7.14:
+    resolution: {integrity: sha512-J6OAed6rhN6zyqL9Of6ZMamhlsOEU/poBVvbHr/dKOYKTeuYYMlDkMv+b6UUV0o2i0tw73cgyv/97WTWaUl0/g==}
+    dev: false
 
   /@typescript-eslint/eslint-plugin@5.57.1(@typescript-eslint/parser@5.57.1)(eslint@8.37.0)(typescript@5.0.4):
     resolution: {integrity: sha512-1MeobQkQ9tztuleT3v72XmY0XuKXVXusAhryoLuU5YZ+mXoYKZP9SQ7Flulh1NX4DTjpGTc2b/eMu4u7M7dhnQ==}
@@ -4300,6 +4322,11 @@ packages:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: false
 
+  /validator@13.9.0:
+    resolution: {integrity: sha512-B+dGG8U3fdtM0/aNK4/X8CXq/EcxU2WPrPEkJGslb47qyHsxmbggTWK0yEA4qnYVNF+nxNlN88o14hIcPmSIEA==}
+    engines: {node: '>= 0.10'}
+    dev: false
+
   /vscode-oniguruma@1.7.0:
     resolution: {integrity: sha512-L9WMGRfrjOhgHSdOYgCt/yRMsXzLDJSL7BPrOZt73gU0iWO4mpqzqQzOz5srxqTvMBaR0XZTSrVWo4j55Rc6cA==}
     dev: false
@@ -4379,4 +4406,8 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: false
+
+  /zod@3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: false

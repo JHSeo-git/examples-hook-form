@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.13",
+    "@hookform/resolvers": "^3.0.1",
     "@radix-ui/react-accessible-icon": "^1.0.2",
     "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-alert-dialog": "^1.0.3",
@@ -41,6 +42,8 @@
     "@types/node": "18.15.11",
     "@types/react": "18.0.34",
     "@types/react-dom": "18.0.11",
+    "@types/title": "^3.4.1",
+    "@types/validator": "^13.7.14",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "autoprefixer": "10.4.14",
@@ -69,9 +72,8 @@
     "tailwindcss": "3.3.1",
     "tailwindcss-animate": "^1.0.5",
     "title": "^3.5.3",
-    "typescript": "5.0.4"
-  },
-  "devDependencies": {
-    "@types/title": "^3.4.1"
+    "typescript": "5.0.4",
+    "validator": "^13.9.0",
+    "zod": "^3.21.4"
   }
 }

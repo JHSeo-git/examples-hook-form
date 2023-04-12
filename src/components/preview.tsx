@@ -6,7 +6,7 @@ interface ExampleMainProps {
   markup: string;
 }
 
-export function ExampleMain({ title, children, markup }: ExampleMainProps) {
+export function Preview({ title, children, markup }: ExampleMainProps) {
   return (
     <main className="relative py-6">
       <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">{title}</h1>

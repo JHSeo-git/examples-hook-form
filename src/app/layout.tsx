@@ -6,6 +6,7 @@ import '@/styles/globals.css';
 
 import { SiteHeader } from '@/components/site-header';
 import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
 
 export const metadata = {
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="container flex-1">{children}</div>
           </div>
         </ThemeProvider>
+        <Toaster />
       </body>
     </html>
   );
