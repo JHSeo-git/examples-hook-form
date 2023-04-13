@@ -1,13 +1,12 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import type { SubmitHandler } from 'react-hook-form';
+import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 import { useToast } from '@/hooks/use-toast';
 import type { Signup } from '@/lib/validations/signup';
-import { sex } from '@/lib/validations/signup';
 import { signupSchema } from '@/lib/validations/signup';
 
 import { Combobox, ComboboxContent, ComboboxItem, ComboboxTrigger } from '../combobox';
@@ -35,14 +34,19 @@ function SignUp() {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data);
+    console.log({ data });
     toast({
-      content: JSON.stringify(data),
+      title: '완료',
+      description: JSON.stringify(data, null, 2),
     });
   };
 
+  const onError: SubmitErrorHandler<FormValues> = (errors) => {
+    console.log({ errors });
+  };
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="mx-auto w-[300px] space-y-8">
+    <form onSubmit={handleSubmit(onSubmit, onError)} className="mx-auto w-[300px] space-y-8">
       <div>
         <Label htmlFor="email">이메일 주소</Label>
         <Input id="email" {...register('email')} className="my-1" />
@@ -86,53 +90,56 @@ function SignUp() {
       </div>
       <div>
         <Label htmlFor="job">직업</Label>
-        <Select
-          name={register('job').name}
-          disabled={register('job').disabled}
-          required={register('job').required}
-        >
-          <SelectTrigger id="job" className="my-1">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="student">학생</SelectItem>
-            <SelectItem value="teacher">선생님</SelectItem>
-            <SelectItem value="developer">개발자</SelectItem>
-            <SelectItem value="designer">디자이너</SelectItem>
-            <SelectItem value="etc">기타</SelectItem>
-          </SelectContent>
-        </Select>
+        <Controller
+          name="job"
+          control={control}
+          render={({ field }) => (
+            <Select name={field.name} value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger id="job" className="my-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="student">학생</SelectItem>
+                <SelectItem value="teacher">선생님</SelectItem>
+                <SelectItem value="developer">개발자</SelectItem>
+                <SelectItem value="designer">디자이너</SelectItem>
+                <SelectItem value="etc">기타</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.job && (
           <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.job.message}
           </HelperText>
         )}
       </div>
-      {/* <div>
+      <div>
         <Label htmlFor="sex">성별</Label>
-        <Select
-          name={register('sex').name}
-          disabled={register('sex').disabled}
-          required={register('sex').required}
-        >
-          <SelectTrigger id="sex" className="my-1">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {Object.entries(sex).map(([key, value]) => (
-              <SelectItem key={key} value={key}>
-                {value}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Controller
+          name="sex"
+          control={control}
+          render={({ field }) => (
+            <Select name={field.name} value={field.value} onValueChange={field.onChange}>
+              <SelectTrigger id="sex" className="my-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="male">남성</SelectItem>
+                <SelectItem value="female">여성</SelectItem>
+                <SelectItem value="other">기타</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
+
         {errors.sex && (
           <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.sex.message}
           </HelperText>
         )}
-      </div> */}
-      <div>
+      </div>
+      {/* <div>
         <Label htmlFor="sex">성별</Label>
         <Controller
           name="sex"
@@ -150,7 +157,7 @@ function SignUp() {
             </Combobox>
           )}
         />
-      </div>
+      </div> */}
       <div>
         <Label htmlFor="phone">휴대폰 번호</Label>
         <Input id="phone" {...register('phone')} className="my-1" />
