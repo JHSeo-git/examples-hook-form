@@ -1,9 +1,6 @@
 lockfileVersion: '6.0'
 
 dependencies:
-  '@headlessui/react':
-    specifier: ^1.7.13
-    version: 1.7.13(react-dom@18.2.0)(react@18.2.0)
   '@hookform/resolvers':
     specifier: ^3.0.1
     version: 3.0.1(react-hook-form@7.43.9)
@@ -91,6 +88,9 @@ dependencies:
   '@radix-ui/react-tooltip':
     specifier: ^1.0.5
     version: 1.0.5(@types/react@18.0.34)(react-dom@18.2.0)(react@18.2.0)
+  '@radix-ui/react-use-controllable-state':
+    specifier: ^1.0.0
+    version: 1.0.0(react@18.2.0)
   '@types/node':
     specifier: 18.15.11
     version: 18.15.11
@@ -268,18 +268,6 @@ packages:
       use-isomorphic-layout-effect: 1.1.2(@types/react@18.0.34)(react@18.2.0)
     transitivePeerDependencies:
       - '@types/react'
-    dev: false
-
-  /@headlessui/react@1.7.13(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-9n+EQKRtD9266xIHXdY5MfiXPDfYwl7zBM7KOx2Ae3Gdgxy8QML1FkCMjq6AsOf0l6N9uvI4HcFtuFlenaldKg==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
-    dependencies:
-      client-only: 0.0.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@hookform/resolvers@3.0.1(react-hook-form@7.43.9):

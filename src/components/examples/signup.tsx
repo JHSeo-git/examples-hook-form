@@ -2,12 +2,15 @@
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { SubmitHandler } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 
 import { useToast } from '@/hooks/use-toast';
 import type { Signup } from '@/lib/validations/signup';
+import { sex } from '@/lib/validations/signup';
 import { signupSchema } from '@/lib/validations/signup';
 
+import { Combobox, ComboboxContent, ComboboxItem, ComboboxTrigger } from '../combobox';
 import { HelperText } from '../helper-text';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
@@ -22,8 +25,11 @@ function SignUp() {
     handleSubmit,
     reset,
     register,
+    control,
+    getValues,
     formState: { errors, isValid },
   } = useForm<FormValues>({
+    defaultValues: {},
     mode: 'onChange',
     resolver: zodResolver(signupSchema),
   });
@@ -80,7 +86,11 @@ function SignUp() {
       </div>
       <div>
         <Label htmlFor="job">직업</Label>
-        <Select {...register('job')}>
+        <Select
+          name={register('job').name}
+          disabled={register('job').disabled}
+          required={register('job').required}
+        >
           <SelectTrigger id="job" className="my-1">
             <SelectValue />
           </SelectTrigger>
@@ -98,8 +108,64 @@ function SignUp() {
           </HelperText>
         )}
       </div>
+      {/* <div>
+        <Label htmlFor="sex">성별</Label>
+        <Select
+          name={register('sex').name}
+          disabled={register('sex').disabled}
+          required={register('sex').required}
+        >
+          <SelectTrigger id="sex" className="my-1">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.entries(sex).map(([key, value]) => (
+              <SelectItem key={key} value={key}>
+                {value}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        {errors.sex && (
+          <HelperText className="absolute ml-1 mt-1" status="error">
+            {errors.sex.message}
+          </HelperText>
+        )}
+      </div> */}
+      <div>
+        <Label htmlFor="sex">성별</Label>
+        <Controller
+          name="sex"
+          control={control}
+          render={({ field }) => (
+            <Combobox>
+              <ComboboxTrigger id="sex" className="my-1" placeholder="성별">
+                {field.value}
+              </ComboboxTrigger>
+              <ComboboxContent>
+                <ComboboxItem>male</ComboboxItem>
+                <ComboboxItem>female</ComboboxItem>
+                <ComboboxItem>other</ComboboxItem>
+              </ComboboxContent>
+            </Combobox>
+          )}
+        />
+      </div>
+      <div>
+        <Label htmlFor="phone">휴대폰 번호</Label>
+        <Input id="phone" {...register('phone')} className="my-1" />
+        {errors.phone && (
+          <HelperText className="absolute ml-1" status="error">
+            {errors.phone.message}
+          </HelperText>
+        )}
+      </div>
+
       <div className="mt-4 flex justify-end">
-        <Button type="submit" disabled={!isValid}>
+        <Button
+          type="submit"
+          //disabled={!isValid}
+        >
           회원가입
         </Button>
       </div>
@@ -108,7 +174,5 @@ function SignUp() {
 }
 
 // birthdate
-// sex
-// phone
 
 export default SignUp;
