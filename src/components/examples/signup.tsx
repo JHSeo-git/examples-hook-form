@@ -51,7 +51,7 @@ function SignUp() {
         <Label htmlFor="email">이메일 주소</Label>
         <Input id="email" {...register('email')} className="my-1" />
         {errors.email && (
-          <HelperText className="absolute ml-1" status="error">
+          <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.email.message}
           </HelperText>
         )}
@@ -60,7 +60,7 @@ function SignUp() {
         <Label htmlFor="password">비밀번호</Label>
         <Input id="password" {...register('password')} className="my-1" type="password" />
         {errors.password && (
-          <HelperText className="absolute ml-1" status="error">
+          <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.password.message}
           </HelperText>
         )}
@@ -74,7 +74,7 @@ function SignUp() {
           type="password"
         />
         {errors.passwordConfirm && (
-          <HelperText className="absolute ml-1" status="error">
+          <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.passwordConfirm.message}
           </HelperText>
         )}
@@ -83,7 +83,7 @@ function SignUp() {
         <Label htmlFor="name">이름</Label>
         <Input id="name" {...register('name')} className="my-1" />
         {errors.name && (
-          <HelperText className="absolute ml-1" status="error">
+          <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.name.message}
           </HelperText>
         )}
@@ -114,7 +114,7 @@ function SignUp() {
           </HelperText>
         )}
       </div>
-      <div>
+      {/* <div>
         <Label htmlFor="sex">성별</Label>
         <Controller
           name="sex"
@@ -138,31 +138,36 @@ function SignUp() {
             {errors.sex.message}
           </HelperText>
         )}
-      </div>
-      {/* <div>
+      </div> */}
+      <div>
         <Label htmlFor="sex">성별</Label>
         <Controller
           name="sex"
           control={control}
           render={({ field }) => (
-            <Combobox>
-              <ComboboxTrigger id="sex" className="my-1" placeholder="성별">
+            <Combobox
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+              placeholder="성별"
+            >
+              <ComboboxTrigger id="sex" className="my-1">
                 {field.value}
               </ComboboxTrigger>
               <ComboboxContent>
-                <ComboboxItem>male</ComboboxItem>
-                <ComboboxItem>female</ComboboxItem>
-                <ComboboxItem>other</ComboboxItem>
+                <ComboboxItem value="male">남성</ComboboxItem>
+                <ComboboxItem value="female">여성</ComboboxItem>
+                <ComboboxItem value="other">기타</ComboboxItem>
               </ComboboxContent>
             </Combobox>
           )}
         />
-      </div> */}
+      </div>
       <div>
         <Label htmlFor="phone">휴대폰 번호</Label>
         <Input id="phone" {...register('phone')} className="my-1" />
         {errors.phone && (
-          <HelperText className="absolute ml-1" status="error">
+          <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.phone.message}
           </HelperText>
         )}
