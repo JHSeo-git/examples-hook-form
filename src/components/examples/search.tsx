@@ -12,7 +12,7 @@ interface FormValues {
 }
 
 function Search() {
-  const { handleSubmit, reset, register } = useForm<FormValues>({
+  const { handleSubmit, register } = useForm<FormValues>({
     mode: 'onChange',
   });
 

@@ -11,10 +11,49 @@ import { signupSchema } from '@/lib/validations/signup';
 
 import { Combobox, ComboboxContent, ComboboxItem, ComboboxTrigger } from '../combobox';
 import { HelperText } from '../helper-text';
+import { Autocomplete } from '../ui/autocomplete';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+
+const sexOptions = [
+  {
+    name: '남성',
+    value: 'male',
+  },
+  {
+    name: '여성',
+    value: 'female',
+  },
+  {
+    name: '기타',
+    value: 'other',
+  },
+];
+
+const hobbyhOptions = [
+  {
+    name: '영화',
+    value: 'movie',
+  },
+  {
+    name: '음악',
+    value: 'music',
+  },
+  {
+    name: '운동',
+    value: 'exercise',
+  },
+  {
+    name: '여행',
+    value: 'travel',
+  },
+  {
+    name: '게임',
+    value: 'game',
+  },
+];
 
 type FormValues = Signup;
 
@@ -22,11 +61,9 @@ function SignUp() {
   const { toast } = useToast();
   const {
     handleSubmit,
-    reset,
     register,
     control,
-    getValues,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {},
     mode: 'onChange',
@@ -114,54 +151,67 @@ function SignUp() {
           </HelperText>
         )}
       </div>
-      {/* <div>
-        <Label htmlFor="sex">성별</Label>
-        <Controller
-          name="sex"
-          control={control}
-          render={({ field }) => (
-            <Select name={field.name} value={field.value} onValueChange={field.onChange}>
-              <SelectTrigger id="sex" className="my-1">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="male">남성</SelectItem>
-                <SelectItem value="female">여성</SelectItem>
-                <SelectItem value="other">기타</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-
-        {errors.sex && (
-          <HelperText className="absolute ml-1 mt-1" status="error">
-            {errors.sex.message}
-          </HelperText>
-        )}
-      </div> */}
       <div>
         <Label htmlFor="sex">성별</Label>
         <Controller
           name="sex"
           control={control}
           render={({ field }) => (
+            <Autocomplete
+              name={field.name}
+              value={sexOptions.find((option) => option.value === field.value?.value) || null}
+              onChange={(e, value) => field.onChange(value || '')}
+              options={sexOptions}
+              getListOptionLabel={(option) => option.name}
+              getOptionLabel={(option) => option.name}
+              filterOptions={(options, state) =>
+                options.filter(
+                  (option) =>
+                    option.value.includes(state.inputValue) ||
+                    option.name.includes(state.inputValue)
+                )
+              }
+              placeholder="성별"
+              className="my-1"
+            />
+          )}
+        />
+        {errors.sex && (
+          <HelperText className="absolute ml-1 mt-1" status="error">
+            {errors.sex.message}
+          </HelperText>
+        )}
+      </div>
+      <div>
+        <Label htmlFor="hobby">취미</Label>
+        <Controller
+          name="hobby"
+          control={control}
+          render={({ field }) => (
             <Combobox
               name={field.name}
               value={field.value}
               onChange={field.onChange}
-              placeholder="성별"
+              placeholder="취미"
             >
-              <ComboboxTrigger id="sex" className="my-1">
+              <ComboboxTrigger id="hobby" className="my-1">
                 {field.value}
               </ComboboxTrigger>
               <ComboboxContent>
-                <ComboboxItem value="male">남성</ComboboxItem>
-                <ComboboxItem value="female">여성</ComboboxItem>
-                <ComboboxItem value="other">기타</ComboboxItem>
+                {hobbyhOptions.map((option) => (
+                  <ComboboxItem key={option.value} value={option.value}>
+                    {option.name}
+                  </ComboboxItem>
+                ))}
               </ComboboxContent>
             </Combobox>
           )}
         />
+        {errors.hobby && (
+          <HelperText className="absolute ml-1 mt-1" status="error">
+            {errors.hobby.message}
+          </HelperText>
+        )}
       </div>
       <div>
         <Label htmlFor="phone">휴대폰 번호</Label>
@@ -184,7 +234,5 @@ function SignUp() {
     </form>
   );
 }
-
-// birthdate
 
 export default SignUp;

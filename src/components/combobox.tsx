@@ -1,11 +1,11 @@
 'use client';
 
+import { useComposedRefs } from '@radix-ui/react-compose-refs';
 import { createContext } from '@radix-ui/react-context';
 import { useControllableState } from '@radix-ui/react-use-controllable-state';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -16,7 +16,11 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
+import { selectTriggerStyle } from './ui/select';
+
 interface ComboboxContextValue {
+  width: string;
+  setWidth: React.Dispatch<React.SetStateAction<string>>;
   name?: string;
   placeholder?: string;
   value: string;
@@ -71,6 +75,8 @@ const Combobox = ({
     [setOpen]
   );
 
+  const [width, setWidth] = React.useState('auto');
+
   return (
     <ComboboxProvider
       name={name}
@@ -79,6 +85,8 @@ const Combobox = ({
       open={open}
       onOpenChange={onOpenChange}
       placeholder={placeholder}
+      width={width}
+      setWidth={setWidth}
     >
       <Popover open={open} onOpenChange={onOpenChange} {...props} />
     </ComboboxProvider>
@@ -89,18 +97,32 @@ const ComboboxTrigger = React.forwardRef<
   React.ElementRef<typeof PopoverTrigger>,
   Omit<React.ComponentPropsWithoutRef<typeof PopoverTrigger>, 'asChild'> & { placeholder?: string }
 >(({ className, children, placeholder: propPlaceHolder, ...props }, forwardedRef) => {
-  const { placeholder = propPlaceHolder } = useComboboxContext('ComboboxTrigger');
+  const { placeholder = propPlaceHolder, setWidth, open } = useComboboxContext('ComboboxTrigger');
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+  const composedRef = useComposedRefs(forwardedRef, buttonRef);
+
+  const handleWidth = React.useCallback(() => {
+    if (buttonRef.current) {
+      setWidth(buttonRef.current.getBoundingClientRect().width + 'px');
+    }
+  }, [setWidth]);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', handleWidth);
+    return () => {
+      window.removeEventListener('resize', handleWidth);
+    };
+  }, [handleWidth]);
+
+  React.useEffect(() => {
+    if (open) {
+      handleWidth();
+    }
+  }, [handleWidth, open]);
 
   return (
-    <PopoverTrigger
-      ref={forwardedRef}
-      className={cn(
-        'flex h-10 w-full items-center justify-between rounded-md border border-slate-300 bg-transparent px-3 py-2 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:text-slate-50 dark:focus:ring-slate-400 dark:focus:ring-offset-slate-900',
-        className
-      )}
-      {...props}
-    >
-      {children || placeholder}
+    <PopoverTrigger ref={composedRef} className={cn(selectTriggerStyle(), className)} {...props}>
+      {children || <span className="text-gray-400">{placeholder}</span>}
       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
     </PopoverTrigger>
   );
@@ -113,19 +135,32 @@ const ComboboxContent = React.forwardRef<
     placeholder?: string;
     emptyText?: string;
   }
->(({ className, children, placeholder: propPlaceHolder, emptyText, ...props }, forwardedRef) => {
-  const { placeholder = propPlaceHolder } = useComboboxContext('ComboboxContent');
+>(
+  (
+    { className, children, placeholder: propPlaceHolder, emptyText, style: propStyle, ...props },
+    forwardedRef
+  ) => {
+    const { placeholder = propPlaceHolder, width } = useComboboxContext('ComboboxContent');
+    const style = React.useMemo(() => {
+      return { ...propStyle, width } as React.CSSProperties;
+    }, [propStyle, width]);
 
-  return (
-    <PopoverContent ref={forwardedRef} {...props} className={cn('p-0', className)}>
-      <Command>
-        <CommandInput placeholder={placeholder} />
-        <CommandEmpty>{emptyText || 'No found.'}</CommandEmpty>
-        <CommandGroup>{children}</CommandGroup>
-      </Command>
-    </PopoverContent>
-  );
-});
+    return (
+      <PopoverContent
+        ref={forwardedRef}
+        {...props}
+        style={style}
+        className={cn('w-auto p-0', className)}
+      >
+        <Command>
+          <CommandInput placeholder={placeholder} />
+          <CommandEmpty>{emptyText || 'No found.'}</CommandEmpty>
+          <CommandGroup>{children}</CommandGroup>
+        </Command>
+      </PopoverContent>
+    );
+  }
+);
 ComboboxContent.displayName = 'ComboboxContent';
 
 const ComboboxItem = React.forwardRef<
