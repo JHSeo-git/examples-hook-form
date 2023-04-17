@@ -9,7 +9,7 @@ export const signupSchema = z
     name: z.string().min(2, { message: '이름은 2자 이상이어야 합니다.' }),
     job: z.string({ required_error: '직업을 선택해주세요.' }),
     sex: z.object(
-      { name: z.string(), value: z.string() },
+      { optionLabel: z.string(), optionValue: z.string() },
       { invalid_type_error: '타입이 올바르지 않습니다.', required_error: '성별을 선택해주세요.' }
     ),
     hobby: z.string({ required_error: '취미를 선택해주세요.' }),

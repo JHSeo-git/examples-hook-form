@@ -21,7 +21,11 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger ref={ref} className={cn(selectTriggerStyle(), className)} {...props}>
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(selectTriggerStyle(), 'data-[placeholder]:text-slate-400', className)}
+    {...props}
+  >
     {children}
     <ChevronDown className="h-4 w-4 opacity-50" />
   </SelectPrimitive.Trigger>

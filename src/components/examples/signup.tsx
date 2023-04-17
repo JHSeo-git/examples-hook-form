@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
+import isMobilePhone from 'validator/es/lib/isMobilePhone';
+import * as z from 'zod';
 
 import { useToast } from '@/hooks/use-toast';
-import type { Signup } from '@/lib/validations/signup';
-import { signupSchema } from '@/lib/validations/signup';
 
 import { Combobox, ComboboxContent, ComboboxItem, ComboboxTrigger } from '../combobox';
 import { HelperText } from '../helper-text';
@@ -17,45 +17,80 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
+const signupSchema = z
+  .object({
+    email: z
+      .string({ required_error: '이메일을 입력해주세요.' })
+      .email({ message: '이메일 형식이 아닙니다.' }),
+    password: z
+      .string({
+        required_error: '비밀번호를 입력해주세요.',
+      })
+      .min(8, { message: '비밀번호는 8자 이상이어야 합니다.' }),
+    passwordConfirm: z
+      .string({ required_error: '비밀번호를 입력해주세요.' })
+      .min(8, { message: '비밀번호는 8자 이상이어야 합니다.' }),
+    name: z
+      .string({
+        required_error: '이름을 입력해주세요.',
+      })
+      .min(2, { message: '이름은 2자 이상이어야 합니다.' }),
+    job: z.string({ required_error: '직업을 선택해주세요.' }),
+    sex: z.object(
+      { optionLabel: z.string(), optionValue: z.string() },
+      { invalid_type_error: '타입이 올바르지 않습니다.', required_error: '성별을 선택해주세요.' }
+    ),
+    hobby: z.string({ required_error: '취미를 선택해주세요.' }),
+    phone: z
+      .string({ required_error: '휴대폰 번호를 입력해주세요.' })
+      .refine(isMobilePhone, { message: '휴대폰 번호 형식이 아닙니다.' }),
+  })
+  .refine((data) => data.password === data.passwordConfirm, {
+    message: '비밀번호가 일치하지 않습니다.',
+    path: ['passwordConfirm'],
+  });
+
+type SignupSchema = z.infer<typeof signupSchema>;
+
 const sexOptions = [
   {
-    name: '남성',
-    value: 'male',
+    optionLabel: '남성',
+    optionValue: 'male',
   },
   {
-    name: '여성',
-    value: 'female',
+    optionLabel: '여성',
+    optionValue: 'female',
   },
   {
-    name: '기타',
-    value: 'other',
+    optionLabel: '기타',
+    optionValue: 'other',
   },
 ];
 
 const hobbyhOptions = [
   {
-    name: '영화',
-    value: 'movie',
+    optionLabel: '영화',
+    optionValue: 'movie',
   },
   {
-    name: '음악',
-    value: 'music',
+    optionLabel: '음악',
+    optionValue: 'music',
   },
   {
-    name: '운동',
-    value: 'exercise',
+    optionLabel: '운동',
+    optionValue: 'exercise',
   },
   {
-    name: '여행',
-    value: 'travel',
+    optionLabel: '여행',
+    optionValue: 'travel',
   },
   {
-    name: '게임',
-    value: 'game',
+    optionLabel: '게임',
+    optionValue: 'game',
   },
 ];
 
-type FormValues = Signup;
+type FormValues = SignupSchema;
 
 function SignUp() {
   const { toast } = useToast();
@@ -71,15 +106,19 @@ function SignUp() {
   });
 
   const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log({ data });
     toast({
-      title: '완료',
+      title: '✅ 완료',
       description: JSON.stringify(data, null, 2),
     });
   };
 
   const onError: SubmitErrorHandler<FormValues> = (errors) => {
-    console.log({ errors });
+    toast({
+      title: '🤔 오류',
+      description: Object.entries(errors)
+        .map(([key, value]) => `${key}: ${value.message}`)
+        .join(', '),
+    });
   };
 
   return (
@@ -126,6 +165,15 @@ function SignUp() {
         )}
       </div>
       <div>
+        <Label htmlFor="phone">휴대폰 번호</Label>
+        <Input id="phone" {...register('phone')} className="my-1" />
+        {errors.phone && (
+          <HelperText className="absolute ml-1 mt-1" status="error">
+            {errors.phone.message}
+          </HelperText>
+        )}
+      </div>
+      <div>
         <Label htmlFor="job">직업</Label>
         <Controller
           name="job"
@@ -133,7 +181,7 @@ function SignUp() {
           render={({ field }) => (
             <Select name={field.name} value={field.value} onValueChange={field.onChange}>
               <SelectTrigger id="job" className="my-1">
-                <SelectValue />
+                <SelectValue placeholder="직업" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="student">학생</SelectItem>
@@ -159,16 +207,18 @@ function SignUp() {
           render={({ field }) => (
             <Autocomplete
               name={field.name}
-              value={sexOptions.find((option) => option.value === field.value?.value) || null}
+              value={
+                sexOptions.find((option) => option.optionValue === field.value?.optionValue) || null
+              }
               onChange={(e, value) => field.onChange(value || '')}
               options={sexOptions}
-              getListOptionLabel={(option) => option.name}
-              getOptionLabel={(option) => option.name}
+              getListOptionLabel={(option) => option.optionLabel}
+              getOptionLabel={(option) => option.optionLabel}
               filterOptions={(options, state) =>
                 options.filter(
                   (option) =>
-                    option.value.includes(state.inputValue) ||
-                    option.name.includes(state.inputValue)
+                    option.optionLabel.includes(state.inputValue) ||
+                    option.optionValue.includes(state.inputValue)
                 )
               }
               placeholder="성별"
@@ -199,8 +249,8 @@ function SignUp() {
               </ComboboxTrigger>
               <ComboboxContent>
                 {hobbyhOptions.map((option) => (
-                  <ComboboxItem key={option.value} value={option.value}>
-                    {option.name}
+                  <ComboboxItem key={option.optionValue} value={option.optionValue}>
+                    {option.optionLabel}
                   </ComboboxItem>
                 ))}
               </ComboboxContent>
@@ -210,15 +260,6 @@ function SignUp() {
         {errors.hobby && (
           <HelperText className="absolute ml-1 mt-1" status="error">
             {errors.hobby.message}
-          </HelperText>
-        )}
-      </div>
-      <div>
-        <Label htmlFor="phone">휴대폰 번호</Label>
-        <Input id="phone" {...register('phone')} className="my-1" />
-        {errors.phone && (
-          <HelperText className="absolute ml-1 mt-1" status="error">
-            {errors.phone.message}
           </HelperText>
         )}
       </div>
