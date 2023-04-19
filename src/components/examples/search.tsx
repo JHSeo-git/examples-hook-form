@@ -4,7 +4,7 @@ import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/components/ui/use-toast';
 
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
